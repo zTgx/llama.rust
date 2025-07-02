@@ -1,0 +1,11 @@
+[package]
+name = "llama_rust"
+version = "0.1.0"
+edition = "2024"
+description = "LLM inference in Rust"
+license = "MIT"
+repository = "https://github.com/zTgx/llama.rust"
+readme = "README.md"
+keywords = ["llama", "inference", "ggml-rs"]
+
+[dependencies]
