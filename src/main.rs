@@ -2,6 +2,9 @@ use anyhow::Result;
 use clap::Parser;
 use std::path::PathBuf;
 
+///! How To Use
+/// cargo build -- -m Qwen_Qwen2-0.5B-Instruct-GGUF_qwen2-0_5b-instruct-q2_k.gguf "hello, my name is"
+
 #[derive(Parser)]
 #[command(
     name = "llama-rust",
@@ -35,6 +38,7 @@ pub fn run_inference(model_path: &PathBuf, prompt: &str) -> Result<String> {
 
     Ok(simulated_output)
 }
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
 
