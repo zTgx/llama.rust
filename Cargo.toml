@@ -1,5 +1,5 @@
 [package]
-name = "llama_rust"
+name = "llama-rust"
 version = "0.1.0"
 edition = "2024"
 description = "LLM inference in Rust"

@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "llama_rust"
+name = "llama-rust"
 version = "0.1.0"
