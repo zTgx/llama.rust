@@ -1,9 +1,14 @@
-//OpenAI Byte Pair Encoders
+use tokenizers::models::bpe::BPE;
+use tokenizers::tokenizer::{EncodeInput, Result, Tokenizer};
 
-use bpe_openai::cl100k;
+fn main() -> Result<()> {
+    let bpe_builder = BPE::from_file("./path/to/vocab.json", "./path/to/merges.txt");
+    let bpe = bpe_builder.dropout(0.1).unk_token("[UNK]".into()).build()?;
 
-fn main() {
-    let bpe = cl100k();
-    let count = bpe.count("Hello, world!");
-    println!("{tokens}");
+    let mut tokenizer = Tokenizer::new(bpe);
+
+    let encoding = tokenizer.encode("Hey there!", false)?;
+    println!("{:?}", encoding.get_tokens());
+
+    Ok(())
 }
