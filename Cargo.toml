@@ -6,7 +6,7 @@ description = "LLM inference in Rust"
 license = "MIT"
 repository = "https://github.com/zTgx/llama.rust"
 readme = "README.md"
-keywords = ["llama", "inference", "ggml-rs"]
+keywords = ["llama", "inference", "llm", "rust"]
 
 [dependencies]
 clap = { version = "4.5", features = ["derive"] }

@@ -9,4 +9,4 @@ LLM inference in Rust
 </div>
 
 > [!IMPORTANT]
-> ***This project is A personal exploration of AI inference mechanics.***
+> ***This project is A personal exploration of AI inference mechanics in Rust.***
