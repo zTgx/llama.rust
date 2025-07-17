@@ -7,6 +7,3 @@ LLM inference in Rust
 [![Crates Downloads](https://img.shields.io/crates/d/llama-rust?logo=rust)](https://crates.io/crates/llama-rust)
 
 </div>
-
-> [!IMPORTANT]
-> ***This project is A personal exploration of AI inference mechanics in Rust.***
