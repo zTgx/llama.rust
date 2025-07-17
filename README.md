@@ -10,6 +10,6 @@ LLM inference in Rust
 
 ## Usage
 ```bash
-cargo run -- --prompt "Machine learning is " --which SmoLM2-135M
+cargo run --release -- --model "meta-llama/Llama-3.2-1B" --prompt "What is the capital of France?" --max-tokens 20 --temperature 0.7
 ```
 
