@@ -1,0 +1,6 @@
+[package]
+name = "llama"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]

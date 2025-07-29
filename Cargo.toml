@@ -1,6 +1,13 @@
-[package]
-name = "llama-rust"
-version = "0.1.0"
+[workspace]
+members = [ 
+    "inference",
+    "llama"
+]
+
+resolver = "2"
+
+[workspace.package]
+version = "0.6.0"
 edition = "2024"
 description = "LLM inference in Rust"
 license = "MIT"
@@ -8,7 +15,7 @@ repository = "https://github.com/zTgx/llama.rust"
 readme = "README.md"
 keywords = ["llama", "inference", "llm", "rust"]
 
-[dependencies]
+[workspace.dependencies]
 clap = { version = "4.5", features = ["derive"] }
 anyhow = "1.0"
 candle-core = { version = "0.9.1", features = ["cuda"] }
