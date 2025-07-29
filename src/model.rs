@@ -82,6 +82,3 @@ impl InferenceEngine {
         Ok(token)
     }
 }
-pub fn config(&self) -> &LlamaConfig {
-    self.model.config()
-}
