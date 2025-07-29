@@ -15,6 +15,9 @@ repository = "https://github.com/zTgx/llama.rust"
 readme = "README.md"
 keywords = ["llama", "inference", "llm", "rust"]
 
+[profile.release]
+debug = true
+
 [workspace.dependencies]
 clap = { version = "4.5", features = ["derive"] }
 anyhow = "1.0"
