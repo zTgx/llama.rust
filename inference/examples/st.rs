@@ -1,9 +1,9 @@
 use ndarray::Array;
+use ndarray::s;
 use ndarray_rand::RandomExt;
 use ndarray_rand::rand::SeedableRng;
 use ndarray_rand::rand_distr::Uniform;
 use rand_isaac::isaac64::Isaac64Rng;
-use ndarray::s;
 
 fn main() {
     // 常量定义

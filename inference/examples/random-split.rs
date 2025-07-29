@@ -1,7 +1,7 @@
+use anyhow::Result;
 use polars::prelude::*;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
-use anyhow::Result;
 
 fn random_split(
     df: &DataFrame,

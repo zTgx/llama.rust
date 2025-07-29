@@ -1,7 +1,8 @@
 use tokenizers::Tokenizer as HFTokenizer;
 
+#[derive(Debug, Clone)]
 pub struct Tokenizer {
-    tokenizer: HFTokenizer,
+    pub tokenizer: HFTokenizer,
     eos_token_id: u32,
 }
 

@@ -1,86 +1,116 @@
+/*
+ * Adapted from
+ * https://github.com/huggingface/candle/blob/main/candle-examples/examples/llama2-c/main.rs
+ * Copyright (c) 2023, The Huggingface team.
+ */
+
 use {
-    crate::{config::Config, tokenizer::Tokenizer},
-    candle_core::{D, Device, Tensor},
-    candle_nn::var_builder::VarBuilder,
-    candle_transformers::models::llama::{Llama, LlamaConfig},
-    std::time::Instant,
+    crate::{args::Args, tokenizer::Tokenizer},
+    candle_core::{D, Tensor},
 };
 
-pub struct InferenceEngine {
-    model: Llama,
-    device: Device,
+use candle_transformers::models::llama2_c as model;
+// use candle_transformers::models::llama2_c_weights as weights;
+// use candle_transformers::models::quantized_llama2_c as qmodel;
+use anyhow::{Error as E, Result};
+// use clap::builder::Str;
+use model::{Cache, Config as ModelConfig};
+// use qmodel::QLlama;
+use candle_core::DType;
+use candle_core::safetensors;
+use candle_transformers::generation::LogitsProcessor;
+
+use candle_core::IndexOp;
+use std::io::Write;
+
+enum Model {
+    Llama(model::Llama),
+    // QLlama(QLlama),
 }
 
-impl InferenceEngine {
-    pub fn new(config: &Config) -> anyhow::Result<Self> {
-        // let device = Device::cuda_if_available(0)?;
-        // // 动态加载模型权重
-        // let model_path = format!("{}/model.safetensors", config.model_id);
-        // let vb = VarBuilder::from_safetensors(&[model_path], &device)?;
-
-        // // 使用默认配置，假设模型兼容 LLaMA 架构
-        // // 注意：实际生产中需根据 model_id 动态加载 config.json
-        // let llama_config = LlamaConfig::default();
-        // let model = Llama::load(vb, &llama_config)?; // TODO: 从hf-hub加载config.json并解析
-
-        // Ok(Self { model, device })
-
-        todo!()
+impl Model {
+    fn forward(&self, xs: &Tensor, pos: usize, cache: &mut Cache) -> Result<Tensor> {
+        match self {
+            Self::Llama(l) => Ok(l.forward(xs, pos, cache)?),
+            // Self::QLlama(l) => Ok(l.forward(xs, pos, cache)?),
+        }
     }
+}
 
+pub struct InferenceEngine;
+impl InferenceEngine {
     pub fn generate(
         &mut self,
         prompt: &str,
         tokenizer: &Tokenizer,
-    ) -> anyhow::Result<(f32, Vec<String>)> {
-        let prompt_tokens = if !prompt.is_empty() {
-            let prompt = format!(" {}", prompt.trim());
-            tokenizer.encode(&prompt)?
-        } else {
-            Vec::new()
-        };
+        args: &Args,
+    ) -> anyhow::Result<(f64, Vec<String>)> {
+        let mut rests = Vec::<String>::new();
 
-        let mut ret = Vec::<String>::new();
-        let instant = Instant::now();
+        let device = crate::device(args.cpu)?;
 
-        // // Tokenize the input prompt
-        // let tokens = tokenizer.encode(prompt)?;
-        // let mut input = Tensor::new(tokens, &self.device)?.unsqueeze(0)?;
+        // Load model: safetensor
+        let config = ModelConfig::tiny_15m();
+        let tensors = safetensors::load(args.model.clone(), &device)?;
+        let vb = candle_nn::VarBuilder::from_tensors(tensors, DType::F32, &device);
+        let mut cache = model::Cache::new(true, &config, vb.pp("rot"))?;
+        let model = Model::Llama(model::Llama::load(vb, config.clone())?);
 
-        // // Initialize output tokens
-        // let mut output_tokens = tokens;
+        println!("starting the inference loop");
+        let mut logits_processor =
+            LogitsProcessor::new(299792458, Some(args.temperature), args.top_p);
+        let mut index_pos = 0;
 
-        // // Generation loop
-        // for _ in 0..config.max_gen_tokens {
-        //     let logits = self.model.forward(&input, 0)?;
-        //     let logits = logits.squeeze(0)?.squeeze(0)?;
+        print!("{}", prompt);
+        let mut tokens = tokenizer.encode(prompt).map_err(E::msg)?;
+        let mut tokenizer =
+            crate::token_output_stream::TokenOutputStream::new(tokenizer.clone().tokenizer);
 
-        //     // Apply temperature sampling
-        //     let next_token = Self::sample_token(&logits, config.temperature)?;
+        let start_gen = std::time::Instant::now();
+        for index in 0.. {
+            if tokens.len() >= config.seq_len {
+                break;
+            }
+            let context_size = if index > 0 { 1 } else { tokens.len() };
+            let ctxt = &tokens[tokens.len().saturating_sub(context_size)..];
+            let input = Tensor::new(ctxt, &device)?.unsqueeze(0)?;
+            let logits = model.forward(&input, index_pos, &mut cache)?;
+            let logits = logits.i((0, logits.dim(1)? - 1))?;
+            let logits = if args.repeat_penalty == 1. || tokens.is_empty() {
+                logits
+            } else {
+                let start_at = tokens.len().saturating_sub(args.repeat_last_n);
+                candle_transformers::utils::apply_repeat_penalty(
+                    &logits,
+                    args.repeat_penalty,
+                    &tokens[start_at..],
+                )?
+            };
+            index_pos += ctxt.len();
 
-        //     // Append token to output
-        //     output_tokens.push(next_token);
+            let next_token = logits_processor.sample(&logits)?;
+            tokens.push(next_token);
+            if let Some(t) = tokenizer.next_token(next_token)? {
+                print!("{t}");
+                std::io::stdout().flush()?;
+            }
+        }
+        if let Some(rest) = tokenizer.decode_rest().map_err(E::msg)? {
+            print!("{rest}");
+            rests.push(rest);
+        }
 
-        //     // Prepare next input
-        //     input = Tensor::new(&output_tokens, &self.device)?.unsqueeze(0)?;
+        let dt = start_gen.elapsed();
+        println!(
+            "\n{} tokens generated ({:.2} token/s)\n",
+            tokens.len(),
+            tokens.len() as f64 / dt.as_secs_f64(),
+        );
 
-        //     // Stop at EOS token
-        //     if next_token == tokenizer.eos_token_id() {
-        //         break;
-        //     }
-        // }
-
-        // // Decode output tokens
-        // let output = tokenizer.decode(&output_tokens)?;
-        // Ok(output)
-
-        let duration = instant.elapsed().as_secs_f32(); // 计算耗时
-        println!("执行耗时: {:?}", duration);
-
-        Ok((duration, ret))
+        Ok((dt.as_secs_f64(), rests))
     }
 
-    fn sample_token(logits: &Tensor, temperature: f32) -> anyhow::Result<u32> {
+    pub fn sample_token(logits: &Tensor, _temperature: f32) -> anyhow::Result<u32> {
         // Simple top-1 sampling for minimal implementation
         let probs = candle_nn::ops::softmax(logits, D::Minus1)?;
         let token = probs.argmax(D::Minus1)?.to_scalar::<u32>()?;
