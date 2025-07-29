@@ -1,7 +1,7 @@
 use polars::prelude::*;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
-use std::path::Path;
+use anyhow::Result;
 
 fn random_split(
     df: &DataFrame,

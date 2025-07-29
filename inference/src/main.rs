@@ -1,7 +1,7 @@
 use {
     anyhow::Result,
     clap::Parser,
-    llama_rust::{config::Config, model::InferenceEngine, tokenizer::Tokenizer},
+    llama_rust::{config::Config, inference::InferenceEngine, tokenizer::Tokenizer},
 };
 
 /// Pretrain 分词模型
