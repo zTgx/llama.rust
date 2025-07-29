@@ -3,6 +3,10 @@ name = "llama-rust"
 version.workspace = true
 edition.workspace = true
 
+[[bin]]
+name = "llama-serve"
+path = "src/main.rs"
+
 [dependencies]
 clap.workspace = true
 anyhow.workspace = true

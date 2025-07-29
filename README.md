@@ -7,7 +7,7 @@ LLM inference in Rust
 
 ## Inference
 ```bash
-cargo run --release -- --model "meta-llama/Llama-3.2-1B" 
+cargo run --release -p llama-rust -- --model "meta-llama/Llama-3.2-1B" 
     --prompt "What is the capital of France?" --max-tokens 20 --temperature 0.7
 ```
 
