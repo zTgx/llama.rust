@@ -1,8 +1,10 @@
-use crate::config::Config;
-use crate::tokenizer::Tokenizer;
-use candle_core::{D, Device, Tensor};
-use candle_nn::var_builder::VarBuilder;
-use candle_transformers::models::llama::{Llama, LlamaConfig};
+use {
+    crate::{config::Config, tokenizer::Tokenizer},
+    candle_core::{D, Device, Tensor},
+    candle_nn::var_builder::VarBuilder,
+    candle_transformers::models::llama::{Llama, LlamaConfig},
+    std::time::Instant,
+};
 
 pub struct InferenceEngine {
     model: Llama,
@@ -30,8 +32,17 @@ impl InferenceEngine {
         &mut self,
         prompt: &str,
         tokenizer: &Tokenizer,
-        config: &Config,
-    ) -> anyhow::Result<(i64, Vec<String>)> {
+    ) -> anyhow::Result<(f32, Vec<String>)> {
+        let prompt_tokens = if !prompt.is_empty() {
+            let prompt = format!(" {}", prompt.trim());
+            tokenizer.encode(&prompt)?
+        } else {
+            Vec::new()
+        };
+
+        let mut ret = Vec::<String>::new();
+        let instant = Instant::now();
+
         // // Tokenize the input prompt
         // let tokens = tokenizer.encode(prompt)?;
         // let mut input = Tensor::new(tokens, &self.device)?.unsqueeze(0)?;
@@ -63,7 +74,10 @@ impl InferenceEngine {
         // let output = tokenizer.decode(&output_tokens)?;
         // Ok(output)
 
-        todo!()
+        let duration = instant.elapsed().as_secs_f32(); // 计算耗时
+        println!("执行耗时: {:?}", duration);
+
+        Ok((duration, ret))
     }
 
     fn sample_token(logits: &Tensor, temperature: f32) -> anyhow::Result<u32> {

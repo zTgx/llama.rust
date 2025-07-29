@@ -58,12 +58,12 @@ fn main() -> Result<()> {
         .map_err(|e| anyhow::anyhow!("Failed to initialize engine: {}", e))?;
 
     // 执行推理并处理输出
-    let (gen_time, ret) = engine.generate(&args.prompt, &tokenizer, &config)?;
+    let (gen_time, ret) = engine.generate(&args.prompt, &tokenizer)?;
 
     // 输出
     println!(
         "\nachieved tok/s: {}",
-        ((ret.len() - 1) as f32 / gen_time as f32) * 1000.0
+        ((ret.len() - 1) as f32 / gen_time) * 1000.0
     );
 
     Ok(())
