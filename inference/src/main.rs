@@ -4,6 +4,10 @@ use {
     llama_rust::{config::Config, model::InferenceEngine, tokenizer::Tokenizer},
 };
 
+/// Pretrain 分词模型
+pub const PRETRAIN_TOKENIZER_BERT_BASE_CASED: &str = "bert-base-cased";
+pub const PRETRAIN_TOKENIZER_GPT2: &str = "gpt2";
+
 /// LLaMA 推理引擎配置参数
 #[derive(Parser, Debug)]
 #[command(name = "llama_inference")]
@@ -46,7 +50,7 @@ fn main() -> Result<()> {
     };
 
     // 加载分词器
-    let tokenizer = Tokenizer::new(&config.model_id)
+    let tokenizer = Tokenizer::new(PRETRAIN_TOKENIZER_BERT_BASE_CASED)
         .map_err(|e| anyhow::anyhow!("Failed to load tokenizer: {}", e))?;
 
     // 加载模型（显式传递调试标志）
