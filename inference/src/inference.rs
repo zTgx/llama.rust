@@ -67,7 +67,7 @@ impl InferenceEngine {
             crate::token_output_stream::TokenOutputStream::new(tokenizer.clone().tokenizer);
 
         let start_gen = std::time::Instant::now();
-        for index in 0.. {
+        for index in 0..args.max_tokens {
             if tokens.len() >= config.seq_len {
                 break;
             }

@@ -12,9 +12,13 @@ pub const PRETRAIN_TOKENIZER_GPT2: &str = "gpt2";
 fn main() -> Result<()> {
     let args = Args::parse();
 
+    println!("{:?}", args);
+
     // 加载分词器
     let tokenizer = Tokenizer::new(PRETRAIN_TOKENIZER_BERT_BASE_CASED)
         .map_err(|e| anyhow::anyhow!("Failed to load tokenizer: {}", e))?;
+
+    println!("loaded tokenizer.");
 
     // 执行推理并处理输出
     let (_gen_time, ret) = InferenceEngine.generate(&args.prompt, &tokenizer, &args)?;
