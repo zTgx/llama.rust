@@ -1,7 +1,8 @@
 [workspace]
 members = [ 
     "inference",
-    "llama"
+    "llama",
+    "kv-cache"
 ]
 
 resolver = "2"
