@@ -3516,6 +3516,7 @@ dependencies = [
 name = "scaled-dot-product-attention"
 version = "0.1.0"
 dependencies = [
+ "all-close",
  "candle-core",
  "candle-nn",
 ]

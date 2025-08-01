@@ -11,3 +11,4 @@ keywords.workspace = true
 [dependencies]
 candle-core.workspace = true
 candle-nn.workspace = true
+all-close.workspace = true
