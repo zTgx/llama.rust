@@ -24,6 +24,7 @@ debug = true
 # llama.rust
 kv-cache = { path = "./kv-cache", package = "kv-cache", version = "0.1.0" }
 all-close ={ path = "./all-close", package = "all-close", version = "0.1.0"}
+scaled-dot-product-attention = { path = "./scaled-dot-product-attention", package = "scaled-dot-product-attention", version = "0.1.0"}
 
 clap = { version = "4.5", features = ["derive"] }
 anyhow = "1.0"
