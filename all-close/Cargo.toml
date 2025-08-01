@@ -1,0 +1,12 @@
+[package]
+name = "all-close"
+version.workspace = true
+edition.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+keywords.workspace = true
+
+[dependencies]
+candle-core.workspace = true
