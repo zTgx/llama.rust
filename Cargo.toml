@@ -1,7 +1,9 @@
 [workspace]
 members = [ 
     "inference",
-    "kv-cache"
+    "kv-cache",
+    "scaled-dot-product-attention",
+    "all-close"
 ]
 
 resolver = "2"
