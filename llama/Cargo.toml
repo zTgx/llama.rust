@@ -1,9 +1,0 @@
-[package]
-name = "llama"
-version.workspace = true
-edition.workspace = true
-
-[dependencies]
-candle-transformers.workspace = true
-candle-core.workspace = true
-candle-nn.workspace = true
