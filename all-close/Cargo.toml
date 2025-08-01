@@ -5,8 +5,8 @@ edition.workspace = true
 description.workspace = true
 license.workspace = true
 repository.workspace = true
-readme.workspace = true
 keywords.workspace = true
+readme = "README.md"
 
 [dependencies]
 candle-core.workspace = true
