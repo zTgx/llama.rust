@@ -19,6 +19,9 @@ keywords = ["llama", "inference", "llm", "rust"]
 debug = true
 
 [workspace.dependencies]
+# llama.rust
+kv-cache = { path = "./kv-cache", package = "kv-cache", version = "0.1.0" }
+
 clap = { version = "4.5", features = ["derive"] }
 anyhow = "1.0"
 candle-core = { version = "0.9.1" }
@@ -35,3 +38,4 @@ hf-hub = "0.4.1"
 tracing-chrome = "0.7.1"
 tracing-subscriber = "0.3.7"
 serde_json = "1.0.99"
+

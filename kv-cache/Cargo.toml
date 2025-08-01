@@ -9,3 +9,4 @@ keywords.workspace = true
 readme = "README.md"
 
 [dependencies]
+candle-core = "0.9.1"

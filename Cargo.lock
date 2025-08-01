@@ -1827,6 +1827,9 @@ dependencies = [
 [[package]]
 name = "kv-cache"
 version = "0.1.0"
+dependencies = [
+ "candle-core",
+]
 
 [[package]]
 name = "lazy_static"
@@ -1894,6 +1897,7 @@ dependencies = [
  "candle-transformers",
  "clap",
  "hf-hub",
+ "kv-cache",
  "ndarray",
  "ndarray-rand",
  "polars",
