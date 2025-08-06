@@ -3,7 +3,8 @@ members = [
     "inference",
     "kv-cache",
     "scaled-dot-product-attention",
-    "all-close"
+    "all-close",
+    "round-multiple"
 ]
 
 resolver = "2"
