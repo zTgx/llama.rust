@@ -4,7 +4,14 @@ members = [
     "kv-cache",
     "scaled-dot-product-attention",
     "all-close",
-    "round-multiple"
+    "round-multiple",
+
+    # Attention
+    "multihead-attention",
+    "flash-attention",
+    "paged-attention",
+    "linear-attention"
+
 ]
 
 resolver = "2"
