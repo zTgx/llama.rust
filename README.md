@@ -5,8 +5,9 @@ LLM inference in Rust
 
 </div>
 
-## Structure
+## Components
 
 - [kv-cache](./kv-cache): `KVCache` struct definition
 - [all-close](./all-close): `all_close` function
-- [scaled-dot-product-attention](./scaled-dot-product-attention): `scaled_dot_product_attention` function
+- [scaled-dot-product-attention](./scaled-dot-product-attention): `scaled_dot_product_attention` function  
+- [round-multiple](./round-multiple/): `round_multiple` function
