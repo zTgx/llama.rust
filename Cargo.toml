@@ -10,8 +10,10 @@ members = [
     "multihead-attention",
     "flash-attention",
     "paged-attention",
-    "linear-attention"
+    "linear-attention",
 
+    # Activation
+    "sigmoid"
 ]
 
 resolver = "2"

@@ -1,0 +1,13 @@
+[package]
+name = "sigmoid"
+version.workspace = true
+edition.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+readme = "README.md"
+
+[dependencies]
+candle-nn.workspace = true
+candle-core.workspace = true
