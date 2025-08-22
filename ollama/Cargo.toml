@@ -11,5 +11,5 @@ readme = "README.md"
 [dependencies]
 ollama-rs.workspace = true
 serde.workspace = true
-chron.workspace = true
+chrono.workspace = true
 anyhow.workspace = true
