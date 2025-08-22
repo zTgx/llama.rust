@@ -1,0 +1,15 @@
+[package]
+name = "ollama"
+version.workspace = true
+edition.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+readme = "README.md"
+
+[dependencies]
+ollama-rs.workspace = true
+serde.workspace = true
+chron.workspace = true
+anyhow.workspace = true
